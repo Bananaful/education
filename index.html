@@ -12,7 +12,15 @@
 		<div class="vvod"> 
 			<h2></h2>
 			<form>
-			<input class="pole" type="text" id="prihod" placeholder="Сумма дохода" size="60">
+			<input class="pole" type="text" id="prihod" placeholder="Сумма дохода семьи" size="60">
+			</form>
+			<h2></h2>
+			<form>
+			<input class="pole" type="text" id="people" placeholder="Количество членов семьи" size="60">
+			</form>
+			<h2></h2>
+			<form>
+			<input class="pole" type="text" id="children" placeholder="Количество детей на иждивении" size="60">
 			</form>
 			<h2></h2>
 			<form>
@@ -20,23 +28,22 @@
 			</form>
 			<h2></h2>
 			<form>
-			<input class="pole" type="text" id="sumObez" placeholder="Сумма ежемесячных затрат" size="60">
+			<input class="pole" type="text" id="sumObez" placeholder="Сумма необходимых ежемесячных затрат" size="58"><abbr data-title="Укажите необходимые бытовые расходы (прожиточный минимум будет учтен автоматически)">?</abbr>
 			</form>
 			<h2></h2>
 			<form class="data">
 			 Срок кредита с: 
-			<input type="date" id="start" min="2024-03-12" max="2040-12-31">
+			<input type="date" id="start" value="2023-03-20">
 			 по: 
-			<input type="date" id="finish" min="2024-03-12" max="2040-12-31">
+			<input type="date" id="finish" value="2024-03-20">
 			</form>
 			<button class="knopka" onclick="logic()">Рассчитать</button>
 		</div>
 		<div class="vvod none" id="div1">
-
 			<table class = "fdata">
 				<tbody>
 					<tr>
-						<th>Ежемесячный (фиксированный) платеж:</th><th id = "efp"></th>
+						<th>Ежемесячный (фиксированный) платеж: <abbr data-title="Платеж расчитывается, принимая во внимание количество детей и взрослых в семье и автоматически вычитает прожиточный минимум из суммы дохода помимо необходимых ежемесячных затрат."><sup>[?]</sup></abbr></th><th id = "efp"></th>
 					</tr>
 					<tr>
 						<th>Количество платежей:</th><th id = "kp"></th>
@@ -60,8 +67,8 @@
 						<th>Полная стоимость кредита, готовых:</th><th id = "pskg"></th>
 					</tr>
 				</tbody>
+			</table>	
 
-			</table>
 			<h2 style="text-align: center">График платежей:</h2>
 			<table id="table2">
 				<thead id = "head2">
@@ -102,7 +109,8 @@
 			head2.after(newTable);
 			newTable.id = 'bodyt';
 		}
-
+		var people = document.getElementById("people").value;
+		var children = document.getElementById("children").value;
 		var percent = document.getElementById("percent").value;
 		var sumObez = document.getElementById("sumObez").value;
 		var prihod = document.getElementById("prihod").value;
@@ -115,18 +123,20 @@
 		var period = dates2-dates;
 		period /= 86400000;
 		
+		var adults = people - children;
+		var pmin = adults * 14958 + children * 14169;
 		document.getElementById("sk").innerHTML = period+" дней.";
 		var sumPay = Math.round(period / 30);
 		document.getElementById("kp").innerHTML = sumPay;
 		var percentByMonth = percent / 12 / 100;
 		document.getElementById("mp").innerHTML = percentByMonth*100+"%.";
-		var everyMonthPay = prihod-sumObez;
+		var everyMonthPay = prihod-sumObez-pmin;
 		document.getElementById("efp").innerHTML = everyMonthPay+" рублей.";
 		var fullCost = everyMonthPay*sumPay
 		document.getElementById("psk").innerHTML = fullCost+" рублей.";
 		
 		ka = (percentByMonth*Math.pow((1+percentByMonth),sumPay))/((Math.pow((1+percentByMonth),sumPay))-1);
-		var tk = (prihod-sumObez)/ka;
+		var tk = (everyMonthPay)/ka;
 		var factGot = 0;
 		var overprice = 0;
 		var fullCostH = tk;
