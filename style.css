@@ -129,25 +129,25 @@ html {
 	
 }
    [data-title] {
-     position: relative; /* Относительное позиционирование */ 
-     cursor: help; /* Меняем курсор на справочный */
+     position: relative; 
+     cursor: help; 
 
    }
    [data-title]::after {
-     content: attr(data-title); /* Выводим текст из атрибута data-title */
-     position: absolute; /* Абсолютное позиционирование */
-     left: 0; top: 1em; /* Положение подсказки */
-     opacity: 0; /* Скрываем подсказку, делая её прозрачной */
-     transition: 0.5s; /* Время появления подсказки */
-     pointer-events: none; /* Подсказка не реагирует на курсор */
-     background: rgba(57, 137, 201, 0.9); /* Синий цвет фона */
-     color: #fff; /* Белый цвет текста */
+     content: attr(data-title);
+     position: absolute; 
+     left: 0; top: 1em;
+     opacity: 0; 
+     transition: 0.5s; 
+     pointer-events: none; 
+     background: rgba(57, 137, 201, 0.9); 
+     color: #fff; 
 	 font-size: 13px;
 	 width: 400px;
-     padding: 0.5em; /* Поля вокруг текста */
+     padding: 0.5em; 
    }
    [data-title]:hover::after {
-     opacity: 1; /* Показываем подсказку */
+     opacity: 1; 
 	 font-size: 13px;
 	 width: 400px;
    }
